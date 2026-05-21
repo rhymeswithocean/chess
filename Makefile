@@ -1,6 +1,6 @@
 CXX = g++
 INCLUDES =
-SRCS = main.cpp boardHelper.cpp
+SRCS = main.cpp boardHelper.cpp piece.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

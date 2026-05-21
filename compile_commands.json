@@ -1,0 +1,38 @@
+[
+  {
+    "file": "main.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-o",
+      "main.o",
+      "main.cpp"
+    ],
+    "directory": "/home/rstudley/Projects/C++/chess",
+    "output": "main.o"
+  },
+  {
+    "file": "boardHelper.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-o",
+      "boardHelper.o",
+      "boardHelper.cpp"
+    ],
+    "directory": "/home/rstudley/Projects/C++/chess",
+    "output": "boardHelper.o"
+  },
+  {
+    "file": "piece.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-o",
+      "piece.o",
+      "piece.cpp"
+    ],
+    "directory": "/home/rstudley/Projects/C++/chess",
+    "output": "piece.o"
+  }
+]

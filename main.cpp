@@ -1,21 +1,14 @@
 #include "boardHelper.h"
 #include "piece.h"
-#include <vector>
 
-std::vector<Piece> board;
+Piece* board[8][8] = {};
+boolean gO = false;
 
 int main (int argc, char *argv[]) {
+    setup();
     clearBuf();
-    std::cout << std::unitbuf;
-    print("Hello\n");
-    print("Hello\n");
-    print("Hello\n");
-    print("Hello\n");
+    printBoard();
 
-    string abc;
-    std::getline(std::cin, abc);
-
-    clearBuf();
     return 0;
 }
 
