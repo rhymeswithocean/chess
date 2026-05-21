@@ -2,7 +2,7 @@
 #include "piece.h"
 
 Piece* board[8][8] = {};
-boolean gO = false;
+bool gO = false;
 
 int main (int argc, char *argv[]) {
     setup();
