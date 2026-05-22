@@ -49,13 +49,22 @@ public:
      * Returns 'w' for white or 'b' for black.
      */
     char getColor() { return color; }
+    /** Returns true if this piece has moved at least once this game. */
     bool getHasMoved() { return hasMoved; }
+    /** Returns the single character identifying this piece type (e.g. 'K', 'r', 'p'). */
+    char getShorthand() { return shorthand; }
 
     /**
      * Returns true if this piece can capture whatever is at (x, y).
      * Returns false if the target square holds a friendly piece or is empty.
      */
     bool canTake(int x, int y);
+
+    /**
+     * Returns true if square (x, y) is not under attack by any enemy piece.
+     * Uses this piece's color to determine which pieces are enemies.
+     */
+    bool isSafe(int x, int y);
 
 protected:
     char color;
@@ -64,12 +73,6 @@ protected:
 };
 
 extern Piece* board[8][8];
-
-/**
- * Returns true if the given square is not under attack by any enemy piece.
- * Currently a stub — always returns true until check detection is implemented.
- */
-bool isSafe(int x, int y);
 
 /**
  * Returns true if any piece blocks the path between (cX, cY) and (x, y).

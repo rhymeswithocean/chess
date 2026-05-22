@@ -9,7 +9,10 @@
  */
 class Pawn : public Piece {
 public:
+    /** @param color 'w' for white, 'b' for black */
     Pawn(char color) : Piece(color, 'p') {}
+    /** Returns true if (x, y) is a legal forward move or diagonal capture. */
     bool isValidMove(int x, int y) override;
+    /** Moves the pawn, promoting it to a Queen if it reaches the back rank. */
     void move(int x, int y) override;
 };

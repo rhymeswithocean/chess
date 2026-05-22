@@ -7,6 +7,8 @@
  */
 class Knight : public Piece {
 public:
+    /** @param color 'w' for white, 'b' for black */
     Knight(char color) : Piece(color, 'k') {}
+    /** Returns true if (x, y) is exactly an L-shape (2+1 squares) away. */
     bool isValidMove(int x, int y) override;
 };

@@ -6,7 +6,24 @@ using std::abs;
 
 Piece::Piece(char color, char shorthand) : color(color), shorthand(shorthand) {}
 
-bool isSafe(int x, int y) { return true; }
+bool Piece::isSafe(int x, int y) {
+    for (int r = 0; r < 8; r++) {
+        for (int c = 0; c < 8; c++) {
+            Piece* p = board[r][c];
+            if (!p || p->getColor() == color) continue;
+
+            // King handled separately — calling its isValidMove would call
+            // isSafe again, causing infinite recursion
+            if (p->getShorthand() == 'K') {
+                if (abs(r - x) <= 1 && abs(c - y) <= 1) return false;
+                continue;
+            }
+
+            if (p->isValidMove(x, y)) return false;
+        }
+    }
+    return true;
+}
 
 bool Piece::canTake(int x, int y) {
     if (board[x][y] == nullptr || board[x][y]->getColor() == this->color) {

@@ -25,4 +25,10 @@ void setup();
  */
 void printBoard();
 
+/**
+ * Erases the last n lines of terminal output using ANSI escape codes.
+ * Useful for redrawing the board in place each turn.
+ */
+void clearLines(int n);
+
 #endif
