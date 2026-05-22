@@ -5,13 +5,35 @@ using std::string;
 class Piece {
 public:
     Piece(char color, char shorthand);
+    /*
+    * Moves the piece to a new space
+    * @pre move is valid
+    */
     virtual void move(int x, int y) = 0;
+    /*
+    * Checks if a given move is valid
+    */
     virtual bool isValidMove(int x, int y) = 0;
     virtual ~Piece() = default;
+    /*
+    * Converts the piece to a human-readable string
+    */
     string toString() const;
+    /*
+    * Stores the current position in a pair of variables
+    * @pre x and y are mutable integer variables
+    */
     void storeCurrentPos(int& x, int& y);
+    /*
+    * Allows the << operator to automatically call toString() on Pieces
+    */
     friend std::ostream& operator<<(std::ostream& os, const Piece& p);
+
     char getColor() { return color; }
+    /*
+    * Moves the piece to a new space
+    * @pre move is valid and will not collide with any other pieces
+    */
     bool canTake(int x, int y);
 
 protected:
