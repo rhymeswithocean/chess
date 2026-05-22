@@ -12,7 +12,7 @@
 - [x] Header documentation
 
 ## Phase 2 — Core Game Loop
-- [ ] Implement `move()` for all pieces — actually update the board array
+- [x] Implement `move()` for all pieces — actually update the board array
 - [ ] Basic game loop in `main` — repeatedly prompt for input until game over
 - [ ] User input parsing — accept a source and destination square (e.g. `e2 e4`)
 - [ ] Turn tracking — alternate between white and black each move
@@ -25,7 +25,7 @@
 - [ ] Stalemate detection — no legal moves and king is not in check
 
 ## Phase 4 — Special Moves
-- [ ] Castling — king and rook swap, with conditions (neither moved, no pieces between, king not in/through check)
+- [x] Castling — king and rook swap, with conditions (neither moved, no pieces between, king not in/through check)
 - [ ] En passant — pawn captures a pawn that just moved two squares
 - [ ] Pawn promotion — replace pawn with chosen piece upon reaching the back rank
 
