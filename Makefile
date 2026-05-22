@@ -1,14 +1,17 @@
 CXX = g++
 INCLUDES =
-SRCS = main.cpp boardHelper.cpp piece.cpp
+SRCS = main.cpp boardHelper.cpp piece.cpp king.cpp queen.cpp rook.cpp bishop.cpp knight.cpp pawn.cpp
 
-OBJS = $(SRCS:.cpp=.o)
+OBJS = $(addprefix build/, $(SRCS:.cpp=.o))
 
-main: $(OBJS)
+main: build $(OBJS)
 	$(CXX) $(OBJS) -o main
 
-%o: %.cpp
+build:
+	mkdir -p build
+
+build/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f *.o main
+	rm -rf build main

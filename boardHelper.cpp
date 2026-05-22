@@ -1,8 +1,11 @@
 #include "boardHelper.h"
-#include "piece.h"
-#include<iostream>
-
-extern Piece* board[8][8];
+#include "king.h"
+#include "queen.h"
+#include "rook.h"
+#include "bishop.h"
+#include "knight.h"
+#include "pawn.h"
+#include <iostream>
 
 void print(const string& s) {
     std::cout << s;

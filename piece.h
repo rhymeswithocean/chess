@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <ostream>
 using std::string;
 
 /**
@@ -19,7 +20,7 @@ public:
      * Moves the piece to (x, y) on the board.
      * @pre isValidMove(x, y) returns true
      */
-    virtual void move(int x, int y) = 0;
+    virtual void move(int x, int y);
 
     /**
      * Returns true if moving this piece to (x, y) is a legal chess move.
@@ -48,6 +49,7 @@ public:
      * Returns 'w' for white or 'b' for black.
      */
     char getColor() { return color; }
+    bool getHasMoved() { return hasMoved; }
 
     /**
      * Returns true if this piece can capture whatever is at (x, y).
@@ -56,69 +58,21 @@ public:
     bool canTake(int x, int y);
 
 protected:
-    char color;      // 'w' or 'b'
-    char shorthand;  // single character identifying piece type
+    char color;
+    char shorthand;
+    bool hasMoved = false;
 };
 
-/**
- * King — moves exactly 1 square in any direction.
- */
-class King : public Piece {
-public:
-    King(char color) : Piece(color, 'K') {}
-    bool isValidMove(int x, int y) override;
-    void move(int x, int y) override;
-};
+extern Piece* board[8][8];
 
 /**
- * Queen — moves any number of squares diagonally or in a straight line.
+ * Returns true if the given square is not under attack by any enemy piece.
+ * Currently a stub — always returns true until check detection is implemented.
  */
-class Queen : public Piece {
-public:
-    Queen(char color) : Piece(color, 'Q') {}
-    bool isValidMove(int x, int y) override;
-    void move(int x, int y) override;
-};
+bool isSafe(int x, int y);
 
 /**
- * Rook — moves any number of squares horizontally or vertically.
+ * Returns true if any piece blocks the path between (cX, cY) and (x, y).
+ * Only valid for straight or diagonal paths.
  */
-class Rook : public Piece {
-public:
-    Rook(char color) : Piece(color, 'r') {}
-    bool isValidMove(int x, int y) override;
-    void move(int x, int y) override;
-};
-
-/**
- * Bishop — moves any number of squares diagonally.
- */
-class Bishop : public Piece {
-public:
-    Bishop(char color) : Piece(color, 'b') {}
-    bool isValidMove(int x, int y) override;
-    void move(int x, int y) override;
-};
-
-/**
- * Knight — moves in an L-shape: 2 squares in one axis and 1 in the other.
- * The only piece that can jump over other pieces.
- */
-class Knight : public Piece {
-public:
-    Knight(char color) : Piece(color, 'k') {}
-    bool isValidMove(int x, int y) override;
-    void move(int x, int y) override;
-};
-
-/**
- * Pawn — moves 1 square forward, or 2 squares forward from its starting row.
- * Captures diagonally 1 square forward. Cannot capture on a forward move.
- * White moves toward lower row indices; black moves toward higher row indices.
- */
-class Pawn : public Piece {
-public:
-    Pawn(char color) : Piece(color, 'p') {}
-    bool isValidMove(int x, int y) override;
-    void move(int x, int y) override;
-};
+bool willHit(int x, int y, int cX, int cY);
