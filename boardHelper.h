@@ -1,34 +1,60 @@
 #ifndef BOARDHELPER_H
 #define BOARDHELPER_H
 #include <string>
+#include "piece.h"
 using std::string;
 
-/**
- * Prints s to stdout with no newline appended.
- */
+/** Prints s to stdout with no newline appended. */
 void print(const string& s);
 
-/**
- * Clears the terminal screen using ANSI escape codes.
- */
+/** Clears the terminal screen using ANSI escape codes. */
 void clearBuf();
 
-/**
- * Places all 32 pieces in their standard starting positions on the board.
- * Must be called once before any game logic runs.
- */
+/** Places all 32 pieces in their standard starting positions on the board. */
 void setup();
 
-/**
- * Prints the current board state to stdout.
- * Each occupied square shows a 2-character piece label (e.g. "wK"); empty squares show "..".
- */
+/** Prints the current board state to stdout. */
 void printBoard();
 
+/** Returns true if loc is a valid algebraic coordinate (file a-h, rank 1-8). */
+bool validLoc(string loc);
+
+/** Parses an algebraic coordinate and writes the board indices into x and y. */
+void storeParsedCoord(string coord, int& x, int& y);
+
 /**
- * Erases the last n lines of terminal output using ANSI escape codes.
- * Useful for redrawing the board in place each turn.
+ * Returns true if the piece at (x, y) belongs to the current player and
+ * their king is not currently in check.
  */
-void clearLines(int n);
+bool isValidPieceToMove(bool white, int x, int y);
+
+/**
+ * Prompts the current player to select one of their pieces by algebraic coordinate.
+ * Loops until a valid owned piece at a valid location is entered.
+ */
+string getPiece(bool white, string msg);
+
+/**
+ * Prompts the current player to enter a destination square for the given piece.
+ * Loops until a valid move for that piece is entered.
+ */
+string getMove(Piece* piece, string msg);
+
+/** Runs one full turn: prompts for a piece and destination, then executes the move. */
+void turn(bool white);
+
+/**
+ * Returns true if moving the piece at (fromX, fromY) to (toX, toY) would leave
+ * that piece's king in check. Handles en passant captures correctly.
+ */
+bool leavesKingInCheck(int fromX, int fromY, int toX, int toY);
+
+/**
+ * Checks both kings for checkmate or stalemate.
+ * On checkmate sets the global `winner` to the winning color ('w' or 'b').
+ * On stalemate leaves `winner` unchanged.
+ * Returns true if the game is over (either condition).
+ */
+bool gameOver();
 
 #endif

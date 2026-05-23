@@ -5,7 +5,7 @@ SRCS = main.cpp boardHelper.cpp piece.cpp king.cpp queen.cpp rook.cpp bishop.cpp
 OBJS = $(addprefix build/, $(SRCS:.cpp=.o))
 
 main: build $(OBJS)
-	$(CXX) $(OBJS) -o main
+	$(CXX) $(OBJS) -o chess
 
 build:
 	mkdir -p build
