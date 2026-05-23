@@ -2,6 +2,8 @@
 #include "piece.h"
 #include <iostream>
 
+// All doc comments written by Claude
+
 Piece* board[8][8] = {};
 char winner;
 Piece* epPawn = nullptr;

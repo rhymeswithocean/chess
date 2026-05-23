@@ -8,7 +8,6 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <cctype>
 
 using std::string;
 
@@ -32,13 +31,6 @@ std::cout << "  a  b  c  d  e  f  g  h" << std::endl << std::endl;
 
 void clearBuf() {
     std::cout << "\033[2J\033[H" << std::flush;
-}
-
-void clearLines(int n) {
-    std::cout << "\r\033[2K";
-    for (int i = 0; i < n; i++)
-        std::cout << "\033[1A\033[2K";
-    std::cout << "\r" << std::flush;
 }
 
 bool isValidPieceToMove(bool white, int x, int y) {
