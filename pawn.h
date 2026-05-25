@@ -15,4 +15,6 @@ public:
     bool isValidMove(int x, int y) override;
     /** Moves the pawn; handles en passant capture and promotes to Queen on the back rank. */
     void move(int x, int y) override;
+private:
+    Piece* promoteChoice(string msg);
 };

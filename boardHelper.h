@@ -10,6 +10,8 @@ void print(const string& s);
 /** Clears the terminal screen using ANSI escape codes. */
 void clearBuf();
 
+void boardRefresh(bool white);
+
 /** Places all 32 pieces in their standard starting positions on the board. */
 void setup();
 
@@ -27,12 +29,6 @@ void storeParsedCoord(string coord, int& x, int& y);
  * their king is not currently in check.
  */
 bool isValidPieceToMove(bool white, int x, int y);
-
-/**
- * Prompts the current player to select one of their pieces by algebraic coordinate.
- * Loops until a valid owned piece at a valid location is entered.
- */
-string getPiece(bool white, string msg);
 
 /**
  * Prompts the current player to enter a destination square for the given piece.

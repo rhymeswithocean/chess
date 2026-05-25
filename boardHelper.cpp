@@ -51,19 +51,23 @@ bool isValidPieceToMove(bool white, int x, int y) {
     return true;
 }
 
-bool validLoc(string loc) {
-    if (loc.size() < 2) return false;
-    if (!(loc[0] >= 'a' && loc[0] <= 'h')) return false;
-    if (!(loc[1] >= '1' && loc[1] <= '8')) return false;
+bool validFmt(string fmt) {
+    if (fmt.size() < 4) return false;
+    if (!(fmt[0] >= 'a' && fmt[0] <= 'h')) return false;
+    if (!(fmt[1] >= '1' && fmt[1] <= '8')) return false;
+    if (!(fmt[2] >= 'a' && fmt[2] <= 'h')) return false;
+    if (!(fmt[3] >= '1' && fmt[3] <= '8')) return false;
+
     return true;
 }
 
-void storeParsedCoord(string coord, int& x, int& y) {
-    x = coord[0] - 'a';
-    y = coord[1] - '1';
+void storeParsedCoords(string coord, int& cX, int& cY, int& x, int& y) {
+    cX = coord[0] - 'a';
+    cY = coord[1] - '1';
+    x =  coord[2] - 'a';
+    y =  coord[3] - '1';
 }
 
-// Step 1: simulate a move, check if the moving side's king is left in check, then undo
 bool leavesKingInCheck(int fromX, int fromY, int toX, int toY) {
     Piece* moving  = board[fromX][fromY];
     Piece* target  = board[toX][toY];
@@ -94,28 +98,28 @@ bool leavesKingInCheck(int fromX, int fromY, int toX, int toY) {
     return inCheck;
 }
 
-string getPiece(bool white, string msg) {
-    std::cout << msg << "\n>>> ";
-    string piece;
-    std::cin >> piece;
-    if (!validLoc(piece)) return "";
-    int x, y;
-    storeParsedCoord(piece, x, y);
-    if (board[x][y] == nullptr || board[x][y]->getColor() != (white ? 'w' : 'b')) return "";
-    return piece;
+void boardRefresh(bool white) {
+    clearBuf();
+    std::cout << (white ? "WHITE" : "BLACK") << " TURN\n\n";
+    printBoard();
 }
 
-string getMove(Piece* piece, string msg) {
+string getMove(string msg) {
     std::cout << msg << "\n>>> ";
     string move;
     std::cin >> move;
-    if (!validLoc(move)) return "";
-    int x, y;
-    storeParsedCoord(move, x, y);
+
+    if (!validFmt(move)) return "";
+
+    int cX, cY, x, y;
+    storeParsedCoords(move, cX, cY, x, y);
+
+    Piece* piece = board[cX][cY];
     if (!piece->isValidMove(x, y)) return "";
-    int fromX, fromY;
-    piece->storeCurrentPos(fromX, fromY);
-    if (leavesKingInCheck(fromX, fromY, x, y)) return "";
+
+    piece->storeCurrentPos(cX, cY);
+    if (leavesKingInCheck(cX, cY, x, y)) return "";
+
     return move;
 }
 
@@ -123,34 +127,21 @@ void turn(bool white) {
     extern Piece* epPawn;
     epPawn = nullptr;
 
-    string from, to;
-    int cX, cY;
-    string pieceMsg = "Enter piece to move:";
+    string move;
+    int cX, cY, x, y;
+    string moveMsg = "Enter move:";
 
     while (true) {
-        clearBuf();
-        std::cout << (white ? "WHITE" : "BLACK") << " TURN\n\n";
-        printBoard();
-        from = getPiece(white, pieceMsg);
-        if (from.empty()) { pieceMsg = "Invalid. Enter piece to move:"; continue; }
-        storeParsedCoord(from, cX, cY);
+        boardRefresh(white);
+        move = getMove(moveMsg);
+        if (move.empty()) { moveMsg = "Invalid. Enter move:"; continue; }
 
-        string moveMsg = "Enter move:";
-        while (true) {
-            clearBuf();
-            std::cout << (white ? "WHITE" : "BLACK") << " TURN\n\n";
-            printBoard();
-            std::cout << "Moving: " << from << "\n";
-            to = getMove(board[cX][cY], moveMsg);
-            if (!to.empty()) break;
-            moveMsg = "Invalid. Enter move:";
-        }
+        storeParsedCoords(move, cX, cY, x, y);
+
         break;
     }
 
-    int nX, nY;
-    storeParsedCoord(to, nX, nY);
-    board[cX][cY]->move(nX, nY);
+    board[cX][cY]->move(x, y);
 }
 
 bool gameOver() {
@@ -171,7 +162,7 @@ bool gameOver() {
 
             if (count > 0) continue;
 
-            // King has no moves — check if any other friendly piece can move
+            // King has no moves, check if any other friendly piece can move
             char color = king->getColor();
             for (int fr = 0; fr < 8; fr++) {
                 for (int fc = 0; fc < 8; fc++) {

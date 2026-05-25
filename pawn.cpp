@@ -1,6 +1,11 @@
 #include "pawn.h"
+#include "boardHelper.h"
 #include "queen.h"
+#include "knight.h"
+#include "rook.h"
+#include "bishop.h"
 #include <cstdlib>
+#include <iostream>
 using std::abs;
 
 extern Piece* board[8][8];
@@ -44,6 +49,21 @@ bool Pawn::isValidMove(int x, int y) {
     return false;
 }
 
+Piece* Pawn::promoteChoice(string msg) {
+    std::cout << "\n\n" << msg << std::endl;
+    char piece;
+    std::cin >> piece;
+
+    switch (piece) {
+        case 'Q': return new Queen(color);
+        case 'k': return new Rook(color);
+        case 'r': return new Bishop(color);
+        case 'b': return new Knight(color);
+        case 'h': return this->promoteChoice("Your options are [Q]ueen, [k]night, [r]ook, [b]ishop:");
+        default:  return this->promoteChoice("Invalid Choice. Your options are [Q]ueen, [k]night, [r]ook, [b]ishop:");
+    }
+}
+
 void Pawn::move(int x, int y) {
     int cX, cY;
     storeCurrentPos(cX, cY);
@@ -58,7 +78,7 @@ void Pawn::move(int x, int y) {
 
     delete board[x][y];
     if (y == 7 || y == 0)
-        board[x][y] = new Queen(color);
+        board[x][y] = this->promoteChoice("How would you like to promote your pawn (type 'h' options):");
     else
         board[x][y] = this;
 
