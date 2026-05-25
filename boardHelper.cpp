@@ -57,7 +57,10 @@ bool validFmt(string fmt) {
     if (!(fmt[1] >= '1' && fmt[1] <= '8')) return false;
     if (!(fmt[2] >= 'a' && fmt[2] <= 'h')) return false;
     if (!(fmt[3] >= '1' && fmt[3] <= '8')) return false;
-
+    if (fmt.size() >= 5 && (fmt[3] == '1' || fmt[3] == '8')) {
+        char p = fmt[4];
+        if (p != 'Q' && p != 'r' && p != 'b' && p != 'k') return false;
+    }
     return true;
 }
 
@@ -68,20 +71,20 @@ void storeParsedCoords(string coord, int& cX, int& cY, int& x, int& y) {
     y =  coord[3] - '1';
 }
 
-bool leavesKingInCheck(int fromX, int fromY, int toX, int toY) {
-    Piece* moving  = board[fromX][fromY];
-    Piece* target  = board[toX][toY];
+bool leavesKingInCheck(int cX, int cY, int x, int y) {
+    Piece* moving  = board[cX][cY];
+    Piece* target  = board[x][y];
     char   color   = moving->getColor();
 
     // En passant: pawn moves diagonally to an empty square — side-captured pawn must also vanish
     Piece* epCaptured = nullptr;
-    if (dynamic_cast<Pawn*>(moving) && fromX != toX && target == nullptr) {
-        epCaptured       = board[toX][fromY];
-        board[toX][fromY] = nullptr;
+    if (dynamic_cast<Pawn*>(moving) && cX != x && target == nullptr) {
+        epCaptured = board[x][cY];
+        board[x][y] = nullptr;
     }
 
-    board[toX][toY]     = moving;
-    board[fromX][fromY] = nullptr;
+    board[x][y]     = moving;
+    board[cX][cY] = nullptr;
 
     bool inCheck = false;
     for (int r = 0; r < 8 && !inCheck; r++)
@@ -91,9 +94,9 @@ bool leavesKingInCheck(int fromX, int fromY, int toX, int toY) {
                 !board[r][c]->isSafe(r, c))
                 inCheck = true;
 
-    board[fromX][fromY] = moving;
-    board[toX][toY]     = target;
-    if (epCaptured) board[toX][fromY] = epCaptured;
+    board[cX][cY] = moving;
+    board[x][y]     = target;
+    if (epCaptured) board[x][cY] = epCaptured;
 
     return inCheck;
 }
@@ -117,6 +120,11 @@ string getMove(string msg) {
     Piece* piece = board[cX][cY];
     if (!piece->isValidMove(x, y)) return "";
 
+    if (move.size() >= 5) {
+        Pawn* pawn = dynamic_cast<Pawn*>(piece);
+        if (pawn) pawn->setPromotion(move[4]);
+    }
+
     piece->storeCurrentPos(cX, cY);
     if (leavesKingInCheck(cX, cY, x, y)) return "";
 
@@ -124,9 +132,6 @@ string getMove(string msg) {
 }
 
 void turn(bool white) {
-    extern Piece* epPawn;
-    epPawn = nullptr;
-
     string move;
     int cX, cY, x, y;
     string moveMsg = "Enter move:";

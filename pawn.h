@@ -13,8 +13,12 @@ public:
     Pawn(char color) : Piece(color, 'p') {}
     /** Returns true if (x, y) is a legal forward move, diagonal capture, or en passant. */
     bool isValidMove(int x, int y) override;
-    /** Moves the pawn; handles en passant capture and promotes to Queen on the back rank. */
+    /** Moves the pawn; handles en passant capture and promotes on the back rank. */
     void move(int x, int y) override;
+    /** Sets the promotion piece for the next move (inline syntax, e.g. b7b8k). */
+    void setPromotion(char c) { pendingPromotion = c; }
 private:
+    char pendingPromotion = '\0';
+    Piece* makePromotion(char c);
     Piece* promoteChoice(string msg);
 };

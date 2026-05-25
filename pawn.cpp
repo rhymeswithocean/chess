@@ -49,19 +49,21 @@ bool Pawn::isValidMove(int x, int y) {
     return false;
 }
 
-Piece* Pawn::promoteChoice(string msg) {
-    std::cout << "\n\n" << msg << std::endl;
-    char piece;
-    std::cin >> piece;
-
-    switch (piece) {
+Piece* Pawn::makePromotion(char c) {
+    switch (c) {
         case 'Q': return new Queen(color);
-        case 'k': return new Rook(color);
-        case 'r': return new Bishop(color);
-        case 'b': return new Knight(color);
-        case 'h': return this->promoteChoice("Your options are [Q]ueen, [k]night, [r]ook, [b]ishop:");
-        default:  return this->promoteChoice("Invalid Choice. Your options are [Q]ueen, [k]night, [r]ook, [b]ishop:");
+        case 'k': return new Knight(color);
+        case 'r': return new Rook(color);
+        case 'b': return new Bishop(color);
+        default:  return promoteChoice("Invalid. Promote your pawn (Q=queen, k=knight, r=rook, b=bishop):");
     }
+}
+
+Piece* Pawn::promoteChoice(string msg) {
+    std::cout << "\n\n" << msg << "\n>>> ";
+    char c;
+    std::cin >> c;
+    return makePromotion(c);
 }
 
 void Pawn::move(int x, int y) {
@@ -77,10 +79,18 @@ void Pawn::move(int x, int y) {
     epPawn = (abs(y - cY) == 2) ? this : nullptr;
 
     delete board[x][y];
-    if (y == 7 || y == 0)
-        board[x][y] = this->promoteChoice("How would you like to promote your pawn (type 'h' options):");
-    else
+    if (y == 7 || y == 0) {
+        Piece* promoted;
+        if (pendingPromotion != '\0') {
+            promoted = makePromotion(pendingPromotion);
+            pendingPromotion = '\0';
+        } else {
+            promoted = promoteChoice("Promote your pawn (q=queen, k=knight, r=rook, b=bishop):");
+        }
+        board[x][y] = promoted;
+    } else {
         board[x][y] = this;
+    }
 
     board[cX][cY] = nullptr;
     hasMoved = true;

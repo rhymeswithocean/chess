@@ -81,6 +81,9 @@ void Piece::storeCurrentPos(int& x, int& y) {
 }
 
 void Piece::move(int x, int y) {
+    extern Piece* epPawn;
+    epPawn = nullptr;
+
     int cX, cY;
     storeCurrentPos(cX, cY);
 

@@ -10,6 +10,7 @@ void print(const string& s);
 /** Clears the terminal screen using ANSI escape codes. */
 void clearBuf();
 
+/** Clears the screen and prints whose turn it is, followed by the board. */
 void boardRefresh(bool white);
 
 /** Places all 32 pieces in their standard starting positions on the board. */
@@ -18,11 +19,18 @@ void setup();
 /** Prints the current board state to stdout. */
 void printBoard();
 
-/** Returns true if loc is a valid algebraic coordinate (file a-h, rank 1-8). */
-bool validLoc(string loc);
+/**
+ * Returns true if fmt is a valid move string (e.g. "e2e4" or "b7b8Q").
+ * The first four characters must be source and destination in algebraic notation.
+ * An optional fifth character specifies promotion: Q, r, b, or k.
+ */
+bool validFmt(string fmt);
 
-/** Parses an algebraic coordinate and writes the board indices into x and y. */
-void storeParsedCoord(string coord, int& x, int& y);
+/**
+ * Parses a move string and writes the source (cX, cY) and destination (x, y)
+ * board indices into the output parameters.
+ */
+void storeParsedCoords(string coord, int& cX, int& cY, int& x, int& y);
 
 /**
  * Returns true if the piece at (x, y) belongs to the current player and
@@ -31,12 +39,13 @@ void storeParsedCoord(string coord, int& x, int& y);
 bool isValidPieceToMove(bool white, int x, int y);
 
 /**
- * Prompts the current player to enter a destination square for the given piece.
- * Loops until a valid move for that piece is entered.
+ * Prompts the player to enter a move. Returns the move string on success,
+ * or empty string if the input was invalid or leaves the king in check.
+ * Accepts an optional fifth character for pawn promotion (e.g. "b7b8Q").
  */
-string getMove(Piece* piece, string msg);
+string getMove(string msg);
 
-/** Runs one full turn: prompts for a piece and destination, then executes the move. */
+/** Runs one full turn: prompts for a move and executes it. */
 void turn(bool white);
 
 /**
